@@ -256,7 +256,7 @@ def list_product(artisan_id):
 
     listing_date = datetime.now(timezone.utc)
     final_price = base_price
-    status = "Active"
+    status = "ACTIVE"
 
     new_product = Product(
         artisan_id=artisan_id,
