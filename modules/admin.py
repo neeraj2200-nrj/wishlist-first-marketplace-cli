@@ -84,8 +84,8 @@ def admin_menu():
         print("[2]  Artisan Management")
         print("[3]  Product Management")
         print("[4]  Order & Wishlist Oversight")
-        print("[5]  Payments & Reports")
-        print("[6]  Logout")
+        #print("[5]  Payments & Reports")
+        print("[0]  Logout")
 
         choice = input("Enter your choice: ").strip()
 
@@ -192,7 +192,7 @@ def order_wishlist_management():
         choice = input("Enter your choice: ").strip()
 
         if choice == "1":
-            view_all_orders()
+            view_all_orders_admin()
         elif choice == "2":
             process_wishlists_to_orders()
             print("✅ Wishlists processed into orders.") 
@@ -590,39 +590,40 @@ def edit_product(artisan_id: int):
 
     db.close()
 
-#------------------------ View All Orders -----------------#
-def view_all_orders(artisan_id: int):
+#------------------------ View All Orders (Admin Version) -----------------#
+def view_all_orders_admin():
     db = SessionLocal()
-
     orders = (
-        db.query(Order, Product)
+        db.query(Order, Product, Artisan)
         .join(Product, Order.product_id == Product.id)
-        .filter(Product.artisan_id == artisan_id)
+        .join(Artisan, Product.artisan_id == Artisan.id)
         .all()
     )
 
     if not orders:
-        print("\n📭 No orders found for your products.\n")
+        print("\n📭 No orders found in the marketplace.\n")
         db.close()
         return
 
     table = []
-    for order, product in orders:
+    for order, product, artisan in orders:
         table.append([
             order.id,
             product.product_name,
+            artisan.artisan_name,
             order.user_id,
             order.quantity,
-            order.total_price,
+            f"₹{order.final_price}",
             order.status,
-            order.order_date.strftime("%Y-%m-%d") if order.order_date else "N/A"
+            order.order_date.strftime("%Y-%m-%d %H:%M:%S") if order.order_date else "N/A"
         ])
 
-    print("\n📦 All Orders for Your Products:\n")
+    print("\n📦 All Marketplace Orders:\n")
     print(tabulate(
         table,
-        headers=["Order ID", "Product", "User ID", "Qty", "Total Price", "Status", "Date"],
+        headers=["Order ID", "Product", "Artisan", "User ID", "Quantity", "Total Price", "Status", "Order Date"],
         tablefmt="fancy_grid"
     ))
 
     db.close()
+

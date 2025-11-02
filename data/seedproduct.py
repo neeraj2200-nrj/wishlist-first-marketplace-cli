@@ -38,6 +38,20 @@ products_data = [
         "duration_days": 3,
         "delivery_days":7,
     },
+    {
+        "artisan_id": 2,
+        "product_name": "jute bag",
+        "description": "high quality jute bag made from natural fibre",
+        "category": CATEGORIES[3],
+        "base_price": 340.0,
+        "fallback_price": 310.0,
+        "final_price": 340.0,
+        "status": "ACTIVE",
+        "threshold": 20,
+        "duration_days": 5,
+        "delivery_days":8,
+    },
+
     # Add more products here
 ]
 

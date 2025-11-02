@@ -24,7 +24,7 @@ artisans_data = [
     },
     {
         "artisan_name": "Akhil",
-        "password": "5678",
+        "password": "1234",
         "email": "akhil@gmail.com",
         "aadhar_no": "123456789013",
         "phone_no": "9876543210",
@@ -32,6 +32,17 @@ artisans_data = [
         "date_of_birth": "2004-05-12",
         "location": "Kochi",
         "ward_number": "3"
+    },
+    {
+        "artisan_name": "Anand",
+        "password": "1234",
+        "email": "anand@gmail.com",
+        "aadhar_no": "726354918012",
+        "phone_no": "9876543470",
+        "address": "kochi,kerala",
+        "date_of_birth": "2001-10-24",
+        "location": "Trivandrum",
+        "ward_number": "2"
     },
     # Add more artisans here
 ]
