@@ -487,7 +487,7 @@ def pending_payment(db: Session, user: User):
 
 #------------------------ View Order History -----------------#
 def order_history(db: Session,user:User):
-    orders = db.query(Order).filter(Order.user_id == user.id,Order.status == "Paid").all()
+    orders = db.query(Order).filter(Order.user_id == user.id,Order.status == "Successfull").all()
 
     if not orders:
         print("⛔ You have no order history yet.")
