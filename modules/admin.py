@@ -533,19 +533,20 @@ def view_all_products():
     db.close()
 
 #------------------------ Edit Product -----------------#
-def edit_product(artisan_id: int):
+def edit_product():
     db = SessionLocal()
 
-    # Fetch artisan's products
-    products = db.query(Product).filter(Product.artisan_id == artisan_id).all()
+    # Fetch all products (admin sees everything)
+    products = db.query(Product).all()
     if not products:
-        print("\n📭 You have no products listed to edit.\n")
+        print("\n📭 No products available to edit.\n")
         db.close()
         return
 
-    print("\n🛠 Your Products:\n")
+    print("\n🛠 All Products:\n")
     for product in products:
-        print(f"ID: {product.id} | Name: {product.product_name} | Status: {product.status}")
+        artisan_name = product.artisan.artisan_name if product.artisan else "Unknown Artisan"
+        print(f"ID: {product.id} | Name: {product.product_name} | Artisan: {artisan_name} | Status: {product.status}")
 
     try:
         product_id = int(input("\nEnter the Product ID you want to edit: "))
@@ -554,30 +555,35 @@ def edit_product(artisan_id: int):
         db.close()
         return
 
-    product = db.query(Product).filter(Product.id == product_id, Product.artisan_id == artisan_id).first()
+    product = db.query(Product).filter(Product.id == product_id).first()
 
     if not product:
-        print("❌ Product not found or you don’t own it.")
+        print("❌ Product not found.")
         db.close()
         return
 
     print("\n--- Editing Product ---")
     new_name = input(f"Enter new name ({product.product_name}): ") or product.product_name
     new_category = input(f"Enter new category ({product.category}): ") or product.category
+
     try:
         new_threshold = int(input(f"Enter new wishlist threshold ({product.threshold}): ") or product.threshold)
     except ValueError:
         new_threshold = product.threshold
+
     try:
         new_base_price = float(input(f"Enter new base price ({product.base_price}): ") or product.base_price)
     except ValueError:
         new_base_price = product.base_price
+
     try:
         new_fallback_price = float(input(f"Enter new fallback price ({product.fallback_price}): ") or product.fallback_price)
     except ValueError:
         new_fallback_price = product.fallback_price
+
     new_status = input(f"Enter new status ({product.status}): ") or product.status
 
+    # Apply updates
     product.product_name = new_name
     product.category = new_category
     product.threshold = new_threshold
@@ -586,9 +592,10 @@ def edit_product(artisan_id: int):
     product.status = new_status
 
     db.commit()
-    print("\n✅ Product updated successfully!\n")
+    print("\n✅ Product updated successfully by Admin!\n")
 
     db.close()
+
 
 #------------------------ View All Orders (Admin Version) -----------------#
 def view_all_orders_admin():
